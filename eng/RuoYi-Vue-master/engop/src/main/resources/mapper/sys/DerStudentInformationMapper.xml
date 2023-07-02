@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eng.sys.mapper.DerStudentInformationMapper">
+    
+    <resultMap type="DerStudentInformation" id="DerStudentInformationResult">
+        <result property="studentId"    column="student_id"    />
+        <result property="name"    column="name"    />
+        <result property="age"    column="age"    />
+        <result property="gender"    column="gender"    />
+        <result property="dateOfBirth"    column="date_of_birth"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="email"    column="email"    />
+        <result property="address"    column="address"    />
+        <result property="dateOfAdmission"    column="date_of_admission"    />
+        <result property="studentClass"    column="student_class"    />
+    </resultMap>
+
+    <sql id="selectDerStudentInformationVo">
+        select student_id, name, age, gender, date_of_birth, phone_number, email, address, date_of_admission, student_class from der_student_information
+    </sql>
+
+    <select id="selectDerStudentInformationList" parameterType="DerStudentInformation" resultMap="DerStudentInformationResult">
+        <include refid="selectDerStudentInformationVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectDerStudentInformationByStudentId" parameterType="Long" resultMap="DerStudentInformationResult">
+        <include refid="selectDerStudentInformationVo"/>
+        where student_id = #{studentId}
+    </select>
+        
+    <insert id="insertDerStudentInformation" parameterType="DerStudentInformation" useGeneratedKeys="true" keyProperty="studentId">
+        insert into der_student_information
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="age != null">age,</if>
+            <if test="gender != null">gender,</if>
+            <if test="dateOfBirth != null">date_of_birth,</if>
+            <if test="phoneNumber != null">phone_number,</if>
+            <if test="email != null">email,</if>
+            <if test="address != null">address,</if>
+            <if test="dateOfAdmission != null">date_of_admission,</if>
+            <if test="studentClass != null">student_class,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="age != null">#{age},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="dateOfBirth != null">#{dateOfBirth},</if>
+            <if test="phoneNumber != null">#{phoneNumber},</if>
+            <if test="email != null">#{email},</if>
+            <if test="address != null">#{address},</if>
+            <if test="dateOfAdmission != null">#{dateOfAdmission},</if>
+            <if test="studentClass != null">#{studentClass},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDerStudentInformation" parameterType="DerStudentInformation">
+        update der_student_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="dateOfBirth != null">date_of_birth = #{dateOfBirth},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="dateOfAdmission != null">date_of_admission = #{dateOfAdmission},</if>
+            <if test="studentClass != null">student_class = #{studentClass},</if>
+        </trim>
+        where student_id = #{studentId}
+    </update>
+
+    <delete id="deleteDerStudentInformationByStudentId" parameterType="Long">
+        delete from der_student_information where student_id = #{studentId}
+    </delete>
+
+    <delete id="deleteDerStudentInformationByStudentIds" parameterType="String">
+        delete from der_student_information where student_id in 
+        <foreach item="studentId" collection="array" open="(" separator="," close=")">
+            #{studentId}
+        </foreach>
+    </delete>
+</mapper>

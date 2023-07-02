@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eng.sys.mapper.DerQuestionBankMapper">
+    
+    <resultMap type="DerQuestionBank" id="DerQuestionBankResult">
+        <result property="questionId"    column="question_id"    />
+        <result property="title"    column="title"    />
+        <result property="questionType"    column="question_type"    />
+        <result property="difficulty"    column="difficulty"    />
+        <result property="content"    column="content"    />
+        <result property="answer"    column="answer"    />
+        <result property="explanation"    column="explanation"    />
+        <result property="creationDate"    column="creation_date"    />
+        <result property="createdBy"    column="created_by"    />
+    </resultMap>
+
+    <sql id="selectDerQuestionBankVo">
+        select question_id, title, question_type, difficulty, content, answer, explanation, creation_date, created_by from der_question_bank
+    </sql>
+
+    <select id="selectDerQuestionBankList" parameterType="DerQuestionBank" resultMap="DerQuestionBankResult">
+        <include refid="selectDerQuestionBankVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectDerQuestionBankByQuestionId" parameterType="Long" resultMap="DerQuestionBankResult">
+        <include refid="selectDerQuestionBankVo"/>
+        where question_id = #{questionId}
+    </select>
+        
+    <insert id="insertDerQuestionBank" parameterType="DerQuestionBank" useGeneratedKeys="true" keyProperty="questionId">
+        insert into der_question_bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="questionType != null">question_type,</if>
+            <if test="difficulty != null">difficulty,</if>
+            <if test="content != null">content,</if>
+            <if test="answer != null">answer,</if>
+            <if test="explanation != null">explanation,</if>
+            <if test="creationDate != null">creation_date,</if>
+            <if test="createdBy != null">created_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="questionType != null">#{questionType},</if>
+            <if test="difficulty != null">#{difficulty},</if>
+            <if test="content != null">#{content},</if>
+            <if test="answer != null">#{answer},</if>
+            <if test="explanation != null">#{explanation},</if>
+            <if test="creationDate != null">#{creationDate},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDerQuestionBank" parameterType="DerQuestionBank">
+        update der_question_bank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="questionType != null">question_type = #{questionType},</if>
+            <if test="difficulty != null">difficulty = #{difficulty},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="answer != null">answer = #{answer},</if>
+            <if test="explanation != null">explanation = #{explanation},</if>
+            <if test="creationDate != null">creation_date = #{creationDate},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+        </trim>
+        where question_id = #{questionId}
+    </update>
+
+    <delete id="deleteDerQuestionBankByQuestionId" parameterType="Long">
+        delete from der_question_bank where question_id = #{questionId}
+    </delete>
+
+    <delete id="deleteDerQuestionBankByQuestionIds" parameterType="String">
+        delete from der_question_bank where question_id in 
+        <foreach item="questionId" collection="array" open="(" separator="," close=")">
+            #{questionId}
+        </foreach>
+    </delete>
+</mapper>

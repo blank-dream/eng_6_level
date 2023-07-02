@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eng.sys.mapper.DerOnlineQuizDemoMapper">
+    
+    <resultMap type="DerOnlineQuizDemo" id="DerOnlineQuizDemoResult">
+        <result property="id"    column="id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="title"    column="title"    />
+        <result property="questionType"    column="question_type"    />
+        <result property="content"    column="content"    />
+        <result property="answer"    column="answer"    />
+        <result property="quizId"    column="quiz_id"    />
+    </resultMap>
+
+    <sql id="selectDerOnlineQuizDemoVo">
+        select id, student_name, title, question_type, content, answer, quiz_id from der_online_quiz_demo
+    </sql>
+
+    <select id="selectDerOnlineQuizDemoList" parameterType="DerOnlineQuizDemo" resultMap="DerOnlineQuizDemoResult">
+        <include refid="selectDerOnlineQuizDemoVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectDerOnlineQuizDemoById" parameterType="Long" resultMap="DerOnlineQuizDemoResult">
+        <include refid="selectDerOnlineQuizDemoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDerOnlineQuizDemo" parameterType="DerOnlineQuizDemo" useGeneratedKeys="true" keyProperty="id">
+        insert into der_online_quiz_demo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="title != null">title,</if>
+            <if test="questionType != null">question_type,</if>
+            <if test="content != null">content,</if>
+            <if test="answer != null">answer,</if>
+            <if test="quizId != null">quiz_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="title != null">#{title},</if>
+            <if test="questionType != null">#{questionType},</if>
+            <if test="content != null">#{content},</if>
+            <if test="answer != null">#{answer},</if>
+            <if test="quizId != null">#{quizId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDerOnlineQuizDemo" parameterType="DerOnlineQuizDemo">
+        update der_online_quiz_demo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="questionType != null">question_type = #{questionType},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="answer != null">answer = #{answer},</if>
+            <if test="quizId != null">quiz_id = #{quizId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDerOnlineQuizDemoById" parameterType="Long">
+        delete from der_online_quiz_demo where id = #{id}
+    </delete>
+
+    <delete id="deleteDerOnlineQuizDemoByIds" parameterType="String">
+        delete from der_online_quiz_demo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eng.sys.mapper.DerOnlineQuizMapper">
+    
+    <resultMap type="DerOnlineQuiz" id="DerOnlineQuizResult">
+        <result property="answerId"    column="answer_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="title"    column="title"    />
+        <result property="questionType"    column="question_type"    />
+        <result property="difficulty"    column="difficulty"    />
+        <result property="content"    column="content"    />
+        <result property="answerType"    column="answer_type"    />
+        <result property="explanation"    column="explanation"    />
+        <result property="answer"    column="answer"    />
+        <result property="gradedBy"    column="graded_by"    />
+        <result property="score"    column="score"    />
+    </resultMap>
+
+    <sql id="selectDerOnlineQuizVo">
+        select answer_id, student_name, title, question_type, difficulty, content, answer_type, explanation, answer, graded_by, score from der_online_quiz
+    </sql>
+
+    <select id="selectDerOnlineQuizList" parameterType="DerOnlineQuiz" resultMap="DerOnlineQuizResult">
+        <include refid="selectDerOnlineQuizVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectDerOnlineQuizByAnswerId" parameterType="Long" resultMap="DerOnlineQuizResult">
+        <include refid="selectDerOnlineQuizVo"/>
+        where answer_id = #{answerId}
+    </select>
+        
+    <insert id="insertDerOnlineQuiz" parameterType="DerOnlineQuiz" useGeneratedKeys="true" keyProperty="answerId">
+        insert into der_online_quiz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="title != null">title,</if>
+            <if test="questionType != null">question_type,</if>
+            <if test="difficulty != null">difficulty,</if>
+            <if test="content != null">content,</if>
+            <if test="answerType != null">answer_type,</if>
+            <if test="explanation != null">explanation,</if>
+            <if test="answer != null">answer,</if>
+            <if test="gradedBy != null">graded_by,</if>
+            <if test="score != null">score,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="title != null">#{title},</if>
+            <if test="questionType != null">#{questionType},</if>
+            <if test="difficulty != null">#{difficulty},</if>
+            <if test="content != null">#{content},</if>
+            <if test="answerType != null">#{answerType},</if>
+            <if test="explanation != null">#{explanation},</if>
+            <if test="answer != null">#{answer},</if>
+            <if test="gradedBy != null">#{gradedBy},</if>
+            <if test="score != null">#{score},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDerOnlineQuiz" parameterType="DerOnlineQuiz">
+        update der_online_quiz
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="questionType != null">question_type = #{questionType},</if>
+            <if test="difficulty != null">difficulty = #{difficulty},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="answerType != null">answer_type = #{answerType},</if>
+            <if test="explanation != null">explanation = #{explanation},</if>
+            <if test="answer != null">answer = #{answer},</if>
+            <if test="gradedBy != null">graded_by = #{gradedBy},</if>
+            <if test="score != null">score = #{score},</if>
+        </trim>
+        where answer_id = #{answerId}
+    </update>
+
+    <delete id="deleteDerOnlineQuizByAnswerId" parameterType="Long">
+        delete from der_online_quiz where answer_id = #{answerId}
+    </delete>
+
+    <delete id="deleteDerOnlineQuizByAnswerIds" parameterType="String">
+        delete from der_online_quiz where answer_id in 
+        <foreach item="answerId" collection="array" open="(" separator="," close=")">
+            #{answerId}
+        </foreach>
+    </delete>
+    <select id="selectName" parameterType="String" resultMap="DerOnlineQuizResult">
+        select * from der_online_quiz where title=#{title}
+    </select>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eng.sys.mapper.DerRegistrationMapper">
+    
+    <resultMap type="DerRegistration" id="DerRegistrationResult">
+        <result property="registrationId"    column="registration_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="registrationDate"    column="registration_date"    />
+        <result property="course"    column="course"    />
+        <result property="registrationFee"    column="registration_fee"    />
+        <result property="contactPersonName"    column="contact_person_name"    />
+        <result property="contactPersonPhone"    column="contact_person_phone"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+    </resultMap>
+
+    <sql id="selectDerRegistrationVo">
+        select registration_id, student_name, registration_date, course,
+         registration_fee, contact_person_name, contact_person_phone,
+          remarks, user_id, dept_id from der_registration resu
+    </sql>
+
+    <select id="selectDerRegistrationList" parameterType="DerRegistration" resultMap="DerRegistrationResult">
+        <include refid="selectDerRegistrationVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectDerRegistrationByRegistrationId" parameterType="Long" resultMap="DerRegistrationResult">
+        <include refid="selectDerRegistrationVo"/>
+        where registration_id = #{registrationId}
+    </select>
+        
+    <insert id="insertDerRegistration" parameterType="DerRegistration" useGeneratedKeys="true" keyProperty="registrationId">
+        insert into der_registration
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="registrationDate != null">registration_date,</if>
+            <if test="course != null">course,</if>
+            <if test="registrationFee != null">registration_fee,</if>
+            <if test="contactPersonName != null">contact_person_name,</if>
+            <if test="contactPersonPhone != null">contact_person_phone,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="registrationDate != null">#{registrationDate},</if>
+            <if test="course != null">#{course},</if>
+            <if test="registrationFee != null">#{registrationFee},</if>
+            <if test="contactPersonName != null">#{contactPersonName},</if>
+            <if test="contactPersonPhone != null">#{contactPersonPhone},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDerRegistration" parameterType="DerRegistration">
+        update der_registration
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="registrationDate != null">registration_date = #{registrationDate},</if>
+            <if test="course != null">course = #{course},</if>
+            <if test="registrationFee != null">registration_fee = #{registrationFee},</if>
+            <if test="contactPersonName != null">contact_person_name = #{contactPersonName},</if>
+            <if test="contactPersonPhone != null">contact_person_phone = #{contactPersonPhone},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+        </trim>
+        where registration_id = #{registrationId}
+    </update>
+
+    <delete id="deleteDerRegistrationByRegistrationId" parameterType="Long">
+        delete from der_registration where registration_id = #{registrationId}
+    </delete>
+
+    <delete id="deleteDerRegistrationByRegistrationIds" parameterType="String">
+        delete from der_registration where registration_id in 
+        <foreach item="registrationId" collection="array" open="(" separator="," close=")">
+            #{registrationId}
+        </foreach>
+    </delete>
+</mapper>
